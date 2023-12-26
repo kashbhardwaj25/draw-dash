@@ -1,5 +1,14 @@
+import { useEffect, useState } from "react";
+import TldrawComponent from "../TldrawComponent.client";
+
 const Login = () => {
-  return <p className="underline">Login Screen</p>;
+  const [mount, setMount] = useState(false);
+
+  useEffect(() => {
+    setMount(true);
+  }, []);
+
+  return mount ? <TldrawComponent /> : null;
 };
 
 export default Login;
