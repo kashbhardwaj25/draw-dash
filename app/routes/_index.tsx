@@ -10,7 +10,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Drawdash</h1>
+      <h1>Welcome to Drawdash: Login or click here to signup</h1>
     </div>
   );
 }
