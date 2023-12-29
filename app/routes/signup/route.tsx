@@ -1,7 +1,8 @@
-import { ActionFunctionArgs } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 
 import { validateSignup } from "./validate";
+import { authCookie, createUser } from "~/auth";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -14,6 +15,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (errors) {
     return { errors };
   }
+
+  const user = await createUser(username, password);
+
+  return redirect("/canvases", {
+    headers: {
+      "Set-Cookie": await authCookie.serialize(user.id),
+    },
+  });
 };
 
 const Signup = () => {
