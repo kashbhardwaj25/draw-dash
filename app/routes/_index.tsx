@@ -65,12 +65,14 @@ export default function Index() {
               </button>
             </div>
 
-            <Link
-              to="/signup"
-              className="text-indigo-600 hover:text-indigo-800 text-sm mt-4"
-            >
-              Click here to create a new account
-            </Link>
+            <div className="mt-8">
+              <Link
+                to="/signup"
+                className="text-indigo-600 hover:text-indigo-800 text-sm mt-4"
+              >
+                Click here to create a new account
+              </Link>
+            </div>
           </Form>
         </div>
       </div>

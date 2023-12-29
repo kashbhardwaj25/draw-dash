@@ -1,6 +1,41 @@
-import { Form, Link } from "@remix-run/react";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { Form, Link, useActionData } from "@remix-run/react";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+
+  const username = String(formData.get("username"));
+  const password = String(formData.get("password"));
+
+  const usernameRegex = new RegExp(/^[a-zA-Z0-9._]+$/);
+
+  let errors: { username?: string; password?: string } = {};
+
+  if (!username) {
+    errors.username = "Please enter a username";
+  } else if (username.length < 8) {
+    errors.username = "Username should be more than 8 characters.";
+  } else if (!usernameRegex.test(username)) {
+    errors.username = "Only alphanumeric, . and _ characters are allowed";
+  }
+
+  if (!password) {
+    errors.password = "Please enter a password";
+  } else if (password.length < 8) {
+    errors.password = "Password should be more than 8 characters.";
+  }
+
+  return {
+    errors: Object.keys(errors).length ? errors : null,
+  };
+};
 
 const Signup = () => {
+  let actionData = useActionData<typeof action>();
+
+  let usernameError = actionData?.errors?.username;
+  let passwordError = actionData?.errors?.password;
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <div className="flex justify-center items-center h-screen">
@@ -12,7 +47,10 @@ const Signup = () => {
                 htmlFor="username"
                 className="block text-sm font-medium text-gray-700"
               >
-                Username
+                Username &nbsp;
+                {usernameError ? (
+                  <span className="text-red-500">{usernameError}</span>
+                ) : null}
               </label>
               <div className="mt-1">
                 <input
@@ -32,7 +70,10 @@ const Signup = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Password &nbsp;
+                {passwordError ? (
+                  <span className="text-red-500">{passwordError}</span>
+                ) : null}
               </label>
               <div className="mt-1">
                 <input
@@ -56,12 +97,14 @@ const Signup = () => {
               </button>
             </div>
 
-            <Link
-              to="/"
-              className="text-indigo-600 hover:text-indigo-800 text-sm mt-4"
-            >
-              Already have an account? Login here
-            </Link>
+            <div className="mt-8">
+              <Link
+                to="/"
+                className="text-indigo-600 hover:text-indigo-800 text-sm"
+              >
+                Already have an account? Login here
+              </Link>
+            </div>
           </Form>
         </div>
       </div>
