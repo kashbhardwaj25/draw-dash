@@ -9,7 +9,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 const Canvases = () => {
-  return <div>Canvases Screen</div>;
+  return (
+    <div>
+      <div>Canvases Screen</div>
+      <form method="post" action="/logout">
+        <button>Logout</button>
+      </form>
+    </div>
+  );
 };
 
 export default Canvases;
