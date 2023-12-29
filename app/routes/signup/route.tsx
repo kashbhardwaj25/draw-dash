@@ -1,33 +1,19 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 
+import { validateSignup } from "./validate";
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   const username = String(formData.get("username"));
   const password = String(formData.get("password"));
 
-  const usernameRegex = new RegExp(/^[a-zA-Z0-9._]+$/);
+  const errors = validateSignup(username, password);
 
-  let errors: { username?: string; password?: string } = {};
-
-  if (!username) {
-    errors.username = "Please enter a username";
-  } else if (username.length < 8) {
-    errors.username = "Username should be more than 8 characters.";
-  } else if (!usernameRegex.test(username)) {
-    errors.username = "Only alphanumeric, . and _ characters are allowed";
+  if (errors) {
+    return { errors };
   }
-
-  if (!password) {
-    errors.password = "Please enter a password";
-  } else if (password.length < 8) {
-    errors.password = "Password should be more than 8 characters.";
-  }
-
-  return {
-    errors: Object.keys(errors).length ? errors : null,
-  };
 };
 
 const Signup = () => {
