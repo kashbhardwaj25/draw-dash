@@ -1,19 +1,12 @@
 import { Link } from "@remix-run/react";
 
-import { LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
-import { handleRedirectionUsingAuthCookie } from "~/auth";
+import { type MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
     { title: "Drawdash" },
     { name: "description", content: "Welcome to Drawdash!" },
   ];
-};
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await handleRedirectionUsingAuthCookie(request);
-
-  return userId;
 };
 
 export default function Index() {

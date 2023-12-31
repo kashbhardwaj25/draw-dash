@@ -32,15 +32,5 @@ export const handleRedirectionUsingAuthCookie = async (request: Request) => {
   const cookieString = request.headers.get("Cookie");
   const userId = await authCookie.parse(cookieString);
 
-  console.log("userId", userId);
-
-  if (userId) {
-    return redirect("/canvases");
-  }
-
-  if (!userId) {
-    return redirect("/");
-  }
-
   return userId;
 };

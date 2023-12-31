@@ -11,7 +11,11 @@ import { validateLogin } from "./validate";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await handleRedirectionUsingAuthCookie(request);
 
-  return userId;
+  if (userId) {
+    return redirect("/canvases");
+  }
+
+  return {};
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
