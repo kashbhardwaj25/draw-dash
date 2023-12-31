@@ -21,13 +21,13 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
   const username = String(formData.get("username"));
   const password = String(formData.get("password"));
 
-  const errors = await validateLogin(username, password);
+  const user = await findUser(username);
+
+  const errors = await validateLogin(username, password, user?.passwordHash);
 
   if (errors) {
     return { errors };
   }
-
-  const user = await findUser(username);
 
   if (!user) {
     return { errors: { message: "Invalid username or password" } };
