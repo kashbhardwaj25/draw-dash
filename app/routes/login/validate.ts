@@ -1,5 +1,3 @@
-import { findUser } from "~/auth";
-
 export const validateLogin = async (username: string, password: string) => {
   let errors: { username?: string; password?: string } = {};
 
