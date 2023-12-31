@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loginAction = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   const username = String(formData.get("username"));
