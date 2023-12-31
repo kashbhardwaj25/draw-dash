@@ -2,19 +2,11 @@ import { Form, Link } from "@remix-run/react";
 
 import {
   redirect,
-  type MetaFunction,
   ActionFunctionArgs,
   LoaderFunctionArgs,
 } from "@remix-run/node";
 import { authCookie, findUser, handleRedirectionUsingAuthCookie } from "~/auth";
 import { validateLogin } from "./validate";
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Drawdash" },
-    { name: "description", content: "Welcome to Drawdash!" },
-  ];
-};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await handleRedirectionUsingAuthCookie(request);
