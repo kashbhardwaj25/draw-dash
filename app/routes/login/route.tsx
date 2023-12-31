@@ -4,6 +4,7 @@ import {
   redirect,
   type MetaFunction,
   ActionFunctionArgs,
+  LoaderFunctionArgs,
 } from "@remix-run/node";
 import { authCookie, findUser } from "~/auth";
 import { validateLogin } from "./validate";
@@ -13,6 +14,17 @@ export const meta: MetaFunction = () => {
     { title: "Drawdash" },
     { name: "description", content: "Welcome to Drawdash!" },
   ];
+};
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const cookieString = request.headers.get("Cookie");
+  const userId = await authCookie.parse(cookieString);
+
+  if (userId) {
+    return redirect("/canvases");
+  }
+
+  return {};
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
