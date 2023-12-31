@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { createCookie } from "@remix-run/node";
+import { createCookie, redirect } from "@remix-run/node";
 
 import { db } from "~/utils/db.server";
 
@@ -26,4 +26,21 @@ export const findUser = async (username: string) => {
   });
 
   return user;
+};
+
+export const handleRedirectionUsingAuthCookie = async (request: Request) => {
+  const cookieString = request.headers.get("Cookie");
+  const userId = await authCookie.parse(cookieString);
+
+  console.log("userId", userId);
+
+  if (userId) {
+    return redirect("/canvases");
+  }
+
+  if (!userId) {
+    return redirect("/");
+  }
+
+  return userId;
 };

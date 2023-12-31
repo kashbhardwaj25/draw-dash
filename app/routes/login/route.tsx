@@ -6,7 +6,7 @@ import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { authCookie, findUser } from "~/auth";
+import { authCookie, findUser, handleRedirectionUsingAuthCookie } from "~/auth";
 import { validateLogin } from "./validate";
 
 export const meta: MetaFunction = () => {
@@ -17,14 +17,9 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookieString = request.headers.get("Cookie");
-  const userId = await authCookie.parse(cookieString);
+  const userId = await handleRedirectionUsingAuthCookie(request);
 
-  if (userId) {
-    return redirect("/canvases");
-  }
-
-  return {};
+  return userId;
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
