@@ -49,7 +49,7 @@ const Canvases = () => {
           userCanvases.map((canvas) => (
             <div key={canvas.id} className="m-4">
               <Link
-                to={`/canvas/${canvas.id}`}
+                to={`/canvases/${canvas.id}`}
                 className="border border-gray-300 shadow-md rounded-lg p-4"
               >
                 <strong className="text-lg font-bold">{canvas.name}</strong>

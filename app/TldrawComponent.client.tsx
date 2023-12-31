@@ -7,9 +7,13 @@ import {
 import "@tldraw/tldraw/tldraw.css";
 import { useLayoutEffect, useState } from "react";
 
-import { initialCanvasData } from "./utils/tldraw.utils";
+import { useLoaderData, useSubmit } from "@remix-run/react";
+import { loader } from "./routes/canvases.$canvasId/route";
 
-export default function PersistenceExample() {
+const TldrawComponent = () => {
+  const { canvas } = useLoaderData<typeof loader>();
+  const submit = useSubmit();
+
   const [store] = useState(() =>
     createTLStore({ shapeUtils: defaultShapeUtils })
   );
@@ -25,12 +29,11 @@ export default function PersistenceExample() {
     setLoadingState({ status: "loading" });
 
     // Get persisted data from prisma db
-    const persistedSnapshot = initialCanvasData;
+    if (canvas && canvas.content) {
+      const prismaDbSnapshot = JSON.parse(canvas.content);
 
-    if (persistedSnapshot) {
       try {
-        const snapshot = persistedSnapshot;
-        store.loadSnapshot(snapshot);
+        store.loadSnapshot(prismaDbSnapshot);
         setLoadingState({ status: "ready" });
       } catch (error: any) {
         setLoadingState({ status: "error", error: error.message }); // Something went wrong
@@ -42,8 +45,16 @@ export default function PersistenceExample() {
     // Each time the store changes, run the (debounced) persist function
     const cleanupFn = store.listen(
       throttle(() => {
-        // const snapshot = store.getSnapshot();
-        // localStorage.setItem(PERSISTENCE_KEY, JSON.stringify(snapshot));
+        const snapshot = store.getSnapshot();
+
+        submit(
+          { finalCanvasSnapshot: JSON.stringify(snapshot) },
+          {
+            method: "post",
+            action: "/save-canvas",
+            navigate: false,
+          }
+        );
       }, 500)
     );
 
@@ -74,4 +85,6 @@ export default function PersistenceExample() {
       <Tldraw store={store} />
     </div>
   );
-}
+};
+
+export default TldrawComponent;

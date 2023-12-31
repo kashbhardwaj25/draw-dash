@@ -1,13 +1,28 @@
 import { useEffect, useState } from "react";
-import { useParams } from "@remix-run/react";
 
 import TldrawComponent from "~/TldrawComponent.client";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { getUserIdFromCookie } from "~/auth";
+import { getCanvasFromId } from "./queries";
+
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  const userId = await getUserIdFromCookie(request);
+  const canvasId = params.canvasId;
+
+  if (!userId) {
+    return redirect("/");
+  }
+
+  if (!canvasId) {
+    return redirect("/canvases");
+  }
+
+  const canvas = await getCanvasFromId(canvasId);
+
+  return { canvas };
+};
 
 const Canvas = () => {
-  const { canvasId } = useParams();
-
-  console.log(canvasId, "<<<<<< CANVAS ID");
-
   const [isCanvasMounted, setIsCanvasMounted] = useState(false);
 
   useEffect(() => {
