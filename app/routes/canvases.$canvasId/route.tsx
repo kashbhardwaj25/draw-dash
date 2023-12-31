@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "@remix-run/react";
+
 import TldrawComponent from "~/TldrawComponent.client";
 
 const Canvas = () => {
@@ -7,13 +8,13 @@ const Canvas = () => {
 
   console.log(canvasId, "<<<<<< CANVAS ID");
 
-  const [mount, setMount] = useState(false);
+  const [isCanvasMounted, setIsCanvasMounted] = useState(false);
 
   useEffect(() => {
-    setMount(true);
+    setIsCanvasMounted(true);
   }, []);
 
-  return mount ? <TldrawComponent /> : null;
+  return isCanvasMounted ? <TldrawComponent /> : null;
 };
 
 export default Canvas;
