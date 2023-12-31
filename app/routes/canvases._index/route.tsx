@@ -28,7 +28,7 @@ const Canvases = () => {
           <div className="flex gap-4">
             <input
               type="text"
-              name="name"
+              name="canvasName"
               placeholder="Canvas Name"
               className="border border-gray-400 rounded-lg p-2"
             />
