@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { createCookie, redirect } from "@remix-run/node";
+import { createCookie } from "@remix-run/node";
 
 import { db } from "~/utils/db.server";
 
