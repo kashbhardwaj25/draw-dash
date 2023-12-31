@@ -19,5 +19,5 @@ model User {
 model Canvas {
   id         String   @id @default(uuid())
   name String
-  content Json
+  content String
 }
