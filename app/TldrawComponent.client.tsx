@@ -6,8 +6,8 @@ import {
 } from "@tldraw/tldraw";
 import "@tldraw/tldraw/tldraw.css";
 import { useLayoutEffect, useState } from "react";
-
 import { useLoaderData, useSubmit } from "@remix-run/react";
+
 import { loader } from "./routes/canvases.$canvasId/route";
 
 const TldrawComponent = () => {
@@ -42,19 +42,24 @@ const TldrawComponent = () => {
       setLoadingState({ status: "ready" }); // Nothing persisted, continue with the empty store
     }
 
-    // Each time the store changes, run the (debounced) persist function
+    // Each time the store changes, run the (debounced) function to save the canvas to the db
     const cleanupFn = store.listen(
       throttle(() => {
         const snapshot = store.getSnapshot();
 
-        submit(
-          { finalCanvasSnapshot: JSON.stringify(snapshot) },
-          {
-            method: "post",
-            action: "/save-canvas",
-            navigate: false,
-          }
-        );
+        if (canvas) {
+          submit(
+            {
+              finalCanvasSnapshot: JSON.stringify(snapshot),
+              canvasId: canvas.id,
+            },
+            {
+              method: "post",
+              action: "/save-canvas",
+              navigate: false,
+            }
+          );
+        }
       }, 500)
     );
 
