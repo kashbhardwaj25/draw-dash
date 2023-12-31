@@ -7,7 +7,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const canvasName = String(formData.get("canvasName"));
 
   const userId = await getUserIdFromCookie(request);
-
   await createCanvas(canvasName, userId);
 
   return redirect("/canvases");

@@ -2,7 +2,7 @@ import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 
 import { getUserIdFromCookie } from "~/auth";
 import { getUserCanvases } from "./queries";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserIdFromCookie(request);
@@ -44,11 +44,16 @@ const Canvases = () => {
           </div>
         </form>
       </div>
-      <div>
+      <div className="flex flex-wrap">
         {userCanvases &&
           userCanvases.map((canvas) => (
             <div key={canvas.id} className="m-4">
-              <a href={`/canvas/${canvas.id}`}>{canvas.name}</a>
+              <Link
+                to={`/canvas/${canvas.id}`}
+                className="border border-gray-300 shadow-md rounded-lg p-4"
+              >
+                <strong className="text-lg font-bold">{canvas.name}</strong>
+              </Link>
             </div>
           ))}
       </div>
