@@ -1,4 +1,4 @@
-const initialCanvasData = {
+export const initialCanvasData = {
   store: {
     "document:document": {
       gridSize: 10,

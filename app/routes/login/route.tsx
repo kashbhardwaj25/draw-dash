@@ -5,11 +5,11 @@ import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { authCookie, findUser, handleRedirectionUsingAuthCookie } from "~/auth";
+import { authCookie, findUser, getUserIdFromCookie } from "~/auth";
 import { validateLogin } from "./validate";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await handleRedirectionUsingAuthCookie(request);
+  const userId = await getUserIdFromCookie(request);
 
   if (userId) {
     return redirect("/canvases");

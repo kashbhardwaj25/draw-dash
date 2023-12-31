@@ -6,14 +6,10 @@ import {
 } from "@remix-run/node";
 
 import { validateSignup } from "./validate";
-import {
-  authCookie,
-  createUser,
-  handleRedirectionUsingAuthCookie,
-} from "~/auth";
+import { authCookie, createUser, getUserIdFromCookie } from "~/auth";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await handleRedirectionUsingAuthCookie(request);
+  const userId = await getUserIdFromCookie(request);
 
   if (userId) {
     return redirect("/canvases");

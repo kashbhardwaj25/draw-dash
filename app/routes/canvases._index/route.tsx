@@ -1,18 +1,24 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 
-import { handleRedirectionUsingAuthCookie } from "~/auth";
+import { getUserIdFromCookie } from "~/auth";
+import { getUserCanvases } from "./queries";
+import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await handleRedirectionUsingAuthCookie(request);
+  const userId = await getUserIdFromCookie(request);
 
   if (!userId) {
     return redirect("/");
   }
 
-  return {};
+  const userCanvases = await getUserCanvases(userId);
+
+  return { userCanvases };
 };
 
 const Canvases = () => {
+  const { userCanvases } = useLoaderData<typeof loader>();
+
   return (
     <div>
       <div className="flex justify-between items-center m-4">
@@ -37,6 +43,14 @@ const Canvases = () => {
             </button>
           </div>
         </form>
+      </div>
+      <div>
+        {userCanvases &&
+          userCanvases.map((canvas) => (
+            <div key={canvas.id} className="m-4">
+              <a href={`/canvas/${canvas.id}`}>{canvas.name}</a>
+            </div>
+          ))}
       </div>
     </div>
   );

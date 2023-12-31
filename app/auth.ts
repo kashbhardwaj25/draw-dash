@@ -28,7 +28,7 @@ export const findUser = async (username: string) => {
   return user;
 };
 
-export const handleRedirectionUsingAuthCookie = async (request: Request) => {
+export const getUserIdFromCookie = async (request: Request) => {
   const cookieString = request.headers.get("Cookie");
   const userId = await authCookie.parse(cookieString);
 
