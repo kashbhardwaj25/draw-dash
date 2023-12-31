@@ -40,7 +40,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 };
 
-export default function Index() {
+export default function Login() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <div className="flex justify-center items-center h-screen">
