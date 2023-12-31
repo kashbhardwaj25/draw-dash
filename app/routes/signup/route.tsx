@@ -94,7 +94,7 @@ const Signup = () => {
 
             <div className="mt-8">
               <Link
-                to="/"
+                to="/login"
                 className="text-indigo-600 hover:text-indigo-800 text-sm"
               >
                 Already have an account? Login here
