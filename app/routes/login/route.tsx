@@ -1,22 +1,37 @@
-import { Form, Link, useActionData } from "@remix-run/react";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { Form, Link } from "@remix-run/react";
 
-import { validateSignup } from "./validate";
-import { authCookie, createUser } from "~/auth";
+import {
+  redirect,
+  type MetaFunction,
+  ActionFunctionArgs,
+} from "@remix-run/node";
+import { authCookie, findUser } from "~/auth";
+import { validateLogin } from "./validate";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Drawdash" },
+    { name: "description", content: "Welcome to Drawdash!" },
+  ];
+};
+
+export const loginAction = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   const username = String(formData.get("username"));
   const password = String(formData.get("password"));
 
-  const errors = await validateSignup(username, password);
+  const errors = await validateLogin(username, password);
 
   if (errors) {
     return { errors };
   }
 
-  const user = await createUser(username, password);
+  const user = await findUser(username);
+
+  if (!user) {
+    return { errors: { message: "Invalid username or password" } };
+  }
 
   return redirect("/canvases", {
     headers: {
@@ -25,27 +40,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 };
 
-const Signup = () => {
-  let actionData = useActionData<typeof action>();
-
-  let usernameError = actionData?.errors?.username;
-  let passwordError = actionData?.errors?.password;
-
+export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <div className="flex justify-center items-center h-screen">
         <div className="border border-gray-300 rounded-lg p-8 shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6">Create an Account</h2>
+          <h2 className="text-2xl font-bold mb-6">Login to Drawdash:</h2>
           <Form method="post" className="space-y-6">
             <div>
               <label
                 htmlFor="username"
                 className="block text-sm font-medium text-gray-700"
               >
-                Username &nbsp;
-                {usernameError ? (
-                  <span className="text-red-500">{usernameError}</span>
-                ) : null}
+                Username
               </label>
               <div className="mt-1">
                 <input
@@ -65,10 +72,7 @@ const Signup = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password &nbsp;
-                {passwordError ? (
-                  <span className="text-red-500">{passwordError}</span>
-                ) : null}
+                Password
               </label>
               <div className="mt-1">
                 <input
@@ -88,16 +92,16 @@ const Signup = () => {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Sign up
+                Login
               </button>
             </div>
 
             <div className="mt-8">
               <Link
-                to="/"
-                className="text-indigo-600 hover:text-indigo-800 text-sm"
+                to="/signup"
+                className="text-indigo-600 hover:text-indigo-800 text-sm mt-4"
               >
-                Already have an account? Login here
+                Click here to create a new account
               </Link>
             </div>
           </Form>
@@ -105,6 +109,4 @@ const Signup = () => {
       </div>
     </div>
   );
-};
-
-export default Signup;
+}

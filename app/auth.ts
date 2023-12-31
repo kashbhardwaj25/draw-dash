@@ -17,3 +17,13 @@ export const createUser = async (username: string, password: string) => {
 
   return { id: user.id, username };
 };
+
+export const findUser = async (username: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      username,
+    },
+  });
+
+  return user;
+};
