@@ -1,11 +1,11 @@
-import { authCookie } from "~/auth";
 import { LoaderFunctionArgs } from "@remix-run/node";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookieString = request.headers.get("Cookie");
-  const userId = await authCookie.parse(cookieString);
+import { handleRedirectionUsingAuthCookie } from "~/auth";
 
-  return { userId };
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const userId = await handleRedirectionUsingAuthCookie(request);
+
+  return userId;
 };
 
 const Canvases = () => {
