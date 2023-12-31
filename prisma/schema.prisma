@@ -15,3 +15,8 @@ model User {
   username    String @unique
   passwordHash String
 }
+
+model Canvas {
+  id         String   @id @default(uuid())
+  name String
+}
