@@ -1,8 +1,8 @@
+import { Link, useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 
-import { getUserIdFromCookie } from "~/auth";
 import { getUserCanvases } from "./queries";
-import { Link, useLoaderData } from "@remix-run/react";
+import { getUserIdFromCookie } from "~/auth";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserIdFromCookie(request);
