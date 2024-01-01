@@ -1,12 +1,12 @@
 import { Form, Link } from "@remix-run/react";
-
 import {
   redirect,
   ActionFunctionArgs,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { authCookie, findUser, getUserIdFromCookie } from "~/auth";
+
 import { validateLogin } from "./validate";
+import { authCookie, findUser, getUserIdFromCookie } from "~/auth";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserIdFromCookie(request);
