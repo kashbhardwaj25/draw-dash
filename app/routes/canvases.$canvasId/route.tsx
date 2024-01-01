@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-
-import TldrawComponent from "~/TldrawComponent.client";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { getUserIdFromCookie } from "~/auth";
+
 import { getCanvasFromId } from "./queries";
+import { getUserIdFromCookie } from "~/auth";
+import TldrawComponent from "~/TldrawComponent.client";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await getUserIdFromCookie(request);
