@@ -12,7 +12,7 @@ export const authCookie = createCookie("auth", {
 export const createUser = async (username: string, password: string) => {
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await db.user.create({
-    data: { passwordHash, username },
+    data: { passwordHash, username, createdAt: new Date() },
   });
 
   return { id: user.id, username };
