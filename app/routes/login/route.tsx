@@ -1,4 +1,4 @@
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useActionData } from "@remix-run/react";
 import {
   redirect,
   ActionFunctionArgs,
@@ -33,7 +33,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (!user) {
-    return { errors: { message: "Invalid username or password" } };
+    return { errors: { username: "User not found" } };
   }
 
   return redirect("/canvases", {
@@ -44,6 +44,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Login() {
+  let actionData = useActionData<typeof action>();
+
+  let usernameError = actionData?.errors?.username;
+  let passwordError = actionData?.errors?.password;
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <div className="flex justify-center items-center h-screen">
@@ -55,7 +60,10 @@ export default function Login() {
                 htmlFor="username"
                 className="block text-sm font-medium text-gray-700"
               >
-                Username
+                Username &nbsp;
+                {usernameError ? (
+                  <span className="text-red-500">{usernameError}</span>
+                ) : null}
               </label>
               <div className="mt-1">
                 <input
@@ -75,7 +83,10 @@ export default function Login() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Password &nbsp;
+                {passwordError ? (
+                  <span className="text-red-500">{passwordError}</span>
+                ) : null}
               </label>
               <div className="mt-1">
                 <input
