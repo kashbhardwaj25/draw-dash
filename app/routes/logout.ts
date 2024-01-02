@@ -1,4 +1,5 @@
 import { redirect } from "@remix-run/node";
+
 import { authCookie } from "~/auth";
 
 export const action = async () => {

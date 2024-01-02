@@ -1,8 +1,13 @@
-import { Link, useLoaderData } from "@remix-run/react";
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { Link, useActionData, useLoaderData } from "@remix-run/react";
+import {
+  redirect,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 
-import { getUserCanvases } from "./queries";
 import { getUserIdFromCookie } from "~/auth";
+import { validateCreateCanvas } from "./validate";
+import { createCanvas, getUserCanvases } from "./queries";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserIdFromCookie(request);
@@ -16,8 +21,27 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { userCanvases };
 };
 
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const canvasName = String(formData.get("canvasName"));
+
+  const errors = await validateCreateCanvas(canvasName);
+
+  if (errors) {
+    return { errors };
+  }
+
+  const userId = await getUserIdFromCookie(request);
+  await createCanvas(canvasName, userId);
+
+  return redirect("/canvases");
+};
+
 const Canvases = () => {
   const { userCanvases } = useLoaderData<typeof loader>();
+  let actionData = useActionData<typeof action>();
+
+  let canvasNameError = actionData?.errors?.canvasName;
 
   return (
     <div>
@@ -30,7 +54,7 @@ const Canvases = () => {
         </form>
       </div>
       <div className="m-4">
-        <form method="post" action="/create-canvas">
+        <form method="post">
           <div className="flex gap-4">
             <input
               type="text"
@@ -43,6 +67,9 @@ const Canvases = () => {
             </button>
           </div>
         </form>
+        {canvasNameError ? (
+          <span className="text-red-500">{canvasNameError}</span>
+        ) : null}
       </div>
       <div className="flex flex-wrap">
         {userCanvases &&
