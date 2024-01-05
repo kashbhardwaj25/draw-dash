@@ -42,7 +42,7 @@ const TldrawComponent = () => {
       setLoadingState({ status: "ready" }); // Nothing persisted, continue with the empty store
     }
 
-    // Each time the store changes, run the (debounced) function to save the canvas to the db
+    // Each time the store changes, run the debounced function to save the canvas to the db
     const cleanupFn = store.listen(
       throttle(() => {
         const snapshot = store.getSnapshot();
